@@ -1,4 +1,7 @@
 spring:
+  output:
+      ansi:
+        enabled: ALWAYS
   datasource:
     driverClassName: org.h2.Driver
     username: sa
@@ -9,4 +12,3 @@ spring:
   h2:
     console:
       enabled: true
-
