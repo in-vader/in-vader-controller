@@ -12,3 +12,9 @@ spring:
   h2:
     console:
       enabled: true
+
+invader:
+  agent:
+    delayMin: 0
+    delayMax: 2000
+    failure: 0.5

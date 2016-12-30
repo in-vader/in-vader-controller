@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.2.RELEASE")
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.4.2.RELEASE'
     }
 }
 
@@ -18,6 +18,7 @@ jar {
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
@@ -25,13 +26,16 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-web")
-    compile("org.springframework.boot:spring-boot-starter-data-jpa")
-    compile group: 'com.h2database', name: 'h2', version: '1.4.193'
+    compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+    compile 'com.h2database:h2:1.4.193'
+    compile 'com.github.invader:invader-controller-transport:0.0.1'
+
+    compileOnly 'org.projectlombok:lombok:1.16.10'
 
     //compile("org.springframework.boot:spring-boot-starter-actuator")
 
     // tag::tests[]
-    testCompile("org.springframework.boot:spring-boot-starter-test")
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
     // end::tests[]
 }
