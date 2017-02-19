@@ -1,16 +1,11 @@
 package com.github.invader.controller.model.configuration;
 
-import javax.persistence.Embeddable;
-import javax.persistence.Embedded;
 import java.util.Objects;
 
-@Embeddable
 public class ConfigurationData {
 
-    @Embedded
     private Delay delay;
 
-    @Embedded
     private Failure failure;
 
     public ConfigurationData() {
@@ -22,18 +17,12 @@ public class ConfigurationData {
         this.failure = failure;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ConfigurationData configuration = (ConfigurationData) o;
-        return Objects.equals(configuration.delay, delay) && Objects.equals(configuration.failure, failure);
-
+    public void setDelay(Delay delay) {
+        this.delay = delay;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(delay, failure);
+    public void setFailure(Failure failure) {
+        this.failure = failure;
     }
 
     public Delay getDelay() {
@@ -44,12 +33,34 @@ public class ConfigurationData {
         return failure;
     }
 
-    public ConfigurationData merge(ConfigurationData merged) {
-        if(merged == null) {
-            return this;
-        }
+    public ConfigurationData merge(ConfigurationData configurationData) {
         return new ConfigurationData(
-              delay == null ? merged.getDelay() : delay, failure == null ? merged.failure : failure
+                delay == null ? configurationData.delay : delay,
+                failure == null ? configurationData.failure : failure
         );
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ConfigurationData other = (ConfigurationData) o;
+        return Objects.equals(other.delay, delay) && Objects.equals(other.failure, failure);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(delay, failure);
+    }
+
+
+    @Override
+    public String toString() {
+        return "ConfigurationData{" +
+                "delay=" + delay +
+                ", failure=" + failure +
+                '}';
     }
 }

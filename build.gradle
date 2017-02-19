@@ -1,16 +1,33 @@
 buildscript {
     repositories {
         mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
+        classpath "gradle.plugin.com.sourcemuse.gradle.plugin:gradle-mongo-plugin:1.0.0"
         classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.4.2.RELEASE'
     }
 }
+
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'com.sourcemuse.mongo'
+
+
+task bootRunDev(type: org.springframework.boot.gradle.run.BootRunTask) {
+    group = 'Application'
+    doFirst() {
+        main = project.mainClassName
+        classpath = sourceSets.main.runtimeClasspath
+        systemProperty 'spring.profiles.active', 'dev'
+    }
+    runWithMongoDb = true
+}
 
 jar {
     baseName = 'in-vader-controller'
@@ -24,12 +41,9 @@ repositories {
 
 dependencies {
     compile 'org.springframework.boot:spring-boot-starter-web'
-    compile 'org.springframework.boot:spring-boot-starter-data-jpa'
-    compile 'com.h2database:h2:1.4.193'
-    compile 'org.hibernate:hibernate-core:5.2.7.Final'
     compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.6.1'
-
-    //compile("org.springframework.boot:spring-boot-starter-actuator")
+    compile 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    compile 'io.javaslang:javaslang:2.0.5'
 
     // tag::tests[]
     testCompile 'org.springframework.boot:spring-boot-starter-test'

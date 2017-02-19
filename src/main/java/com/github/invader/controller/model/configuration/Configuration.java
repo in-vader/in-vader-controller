@@ -1,35 +1,25 @@
 package com.github.invader.controller.model.configuration;
 
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
-@Inheritance
-@DiscriminatorColumn(name="configuration_type")
-@Table(name = "configuration")
+@Document
 public class Configuration {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "configurationIdGenerator")
-    @SequenceGenerator(name = "configurationIdGenerator", sequenceName = "seq_configuration_id")
     private Long id;
 
-    @Embedded
-    private ConfigurationData configurationData = new ConfigurationData();
+    private String applicationId;
 
-    public Long getId() {
-        return id;
-    }
+    private String groupId;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setConfigurationData(ConfigurationData configurationData) {
-        this.configurationData = configurationData;
-    }
+    private ConfigurationData configurationData;
 
     public ConfigurationData getConfigurationData() {
         return configurationData;
     }
 
+    public void setConfigurationData(ConfigurationData configurationData) {
+        this.configurationData = configurationData;
+    }
 }

@@ -1,25 +1,24 @@
 package com.github.invader.controller.model.configuration;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
 import java.util.Objects;
 
-@Embeddable
 public class Failure {
 
-    @Column
-    private Double probabvility;
+    private Double probability;
 
     public Failure() {
-
     }
 
-    public Failure(Double probabvility) {
-        this.probabvility = probabvility;
+    public Failure(Double probability) {
+        this.probability = probability;
     }
 
-    public Double getProbabvility() {
-        return probabvility;
+    public Double getProbability() {
+        return probability;
+    }
+
+    public void setProbability(Double probability) {
+        this.probability = probability;
     }
 
     @Override
@@ -29,12 +28,19 @@ public class Failure {
 
         Failure failure = (Failure) o;
 
-        return Objects.equals(failure.probabvility, probabvility);
+        return Objects.equals(failure.probability, probability);
 
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(probabvility);
+        return Objects.hash(probability);
+    }
+
+    @Override
+    public String toString() {
+        return "Failure{" +
+                "probability=" + probability +
+                '}';
     }
 }
