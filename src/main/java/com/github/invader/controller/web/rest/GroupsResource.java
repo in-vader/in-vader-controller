@@ -1,7 +1,10 @@
 package com.github.invader.controller.web.rest;
 
-import com.github.invader.controller.repository.*;
+import com.github.invader.controller.repository.ApplicationRepository;
+import com.github.invader.controller.repository.GroupRepository;
 import com.github.invader.controller.web.rest.dto.DtoMapper;
+import javaslang.control.Option;
+import javaslang.control.Try;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,34 +21,37 @@ public class GroupsResource {
     private GroupRepository groupRepository;
 
     @Autowired
+    private ApplicationRepository applicationRepository;
+
+    @Autowired
     private DtoMapper mapper;
 
     @RequestMapping(method = RequestMethod.GET, path = "/groups")
     public Set<com.github.invader.controller.web.rest.dto.Group> getGroups() {
-        return groupRepository.findAll().stream().map(g -> new com.github.invader.controller.web.rest.dto.Group(g.getId(), g.getApplications().size()))
+        return groupRepository.findAll().stream()
+                .map(mapper::toGroupDto)
                 .collect(Collectors.toSet());
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/groups/{id}")
     public com.github.invader.controller.web.rest.dto.Group getGroup(@PathVariable("id") String groupId) {
-        return groupRepository.findById(groupId)
-                .map(group -> new com.github.invader.controller.web.rest.dto.Group(group.getId(), group.getApplications().size()))
-                .orElseThrow(() -> new EntityNotFoundException());
+        return Try.of(() -> groupRepository.findOne(groupId))
+                .map(mapper::toGroupDto)
+                .peek(group -> group.setSize(applicationRepository.countByGroupId(groupId)))
+                .getOrElseThrow(() -> new EntityNotFoundException());
     }
 
     @RequestMapping(method = RequestMethod.DELETE, path = "/groups/{id}")
     public ResponseEntity<?> deleteGroup(@PathVariable("id") String groupId) {
-        groupRepository.findById(groupId).map(group -> {
-            groupRepository.delete(group);
-            return group;
-        });
+        Option.of(groupRepository.findOne(groupId))
+                .peek(group -> groupRepository.delete(group));
         return ResponseEntity.ok().build();
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/groups")
-    public void deleteGroup(@RequestBody com.github.invader.controller.web.rest.dto.Group group) {
+    public ResponseEntity<?> addGroup(@RequestBody com.github.invader.controller.web.rest.dto.Group group) {
         groupRepository.save(mapper.fromGroupDto(group));
+        return ResponseEntity.ok().build();
     }
-
 
 }

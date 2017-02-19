@@ -1,16 +1,11 @@
 package com.github.invader.controller.model.configuration;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
 import java.util.Objects;
 
-@Embeddable
 public class Delay {
 
-    @Column
     private Integer min;
 
-    @Column
     private Integer max;
 
     public Delay() {
@@ -19,6 +14,14 @@ public class Delay {
 
     public Delay(Integer min, Integer max) {
         this.min = min;
+        this.max = max;
+    }
+
+    public void setMin(Integer min) {
+        this.min = min;
+    }
+
+    public void setMax(Integer max) {
         this.max = max;
     }
 
@@ -43,5 +46,13 @@ public class Delay {
     @Override
     public int hashCode() {
         return Objects.hash(min, max);
+    }
+
+    @Override
+    public String toString() {
+        return "Delay{" +
+                "min=" + min +
+                ", max=" + max +
+                '}';
     }
 }

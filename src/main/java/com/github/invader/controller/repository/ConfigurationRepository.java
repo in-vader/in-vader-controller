@@ -1,14 +1,15 @@
 package com.github.invader.controller.repository;
 
+
 import com.github.invader.controller.model.configuration.Configuration;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-
 @Repository
-public interface ConfigurationRepository<T extends Configuration> extends JpaRepository<T, Long> {
+public interface ConfigurationRepository extends MongoRepository<Configuration, String> {
 
-    Optional<Configuration> findById(Long id);
+    Configuration findByApplicationId(String applicationId);
+
+    Configuration findByGroupId(String groupId);
 
 }

@@ -20,8 +20,4 @@ public class Application {
         this.lastHeartbeat = lastHeartbeat;
     }
 
-    public String getName() {
-        return name;
-    }
-
 }
