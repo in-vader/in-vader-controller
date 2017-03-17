@@ -1,7 +1,7 @@
 invader:
   defaultConfig:
     delay:
-      min: 0
-      max: 2000
+      min: 5
+      max: 5000
     failure:
       probability: 0.5

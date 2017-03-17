@@ -1,51 +1,68 @@
 package com.github.invader.controller.web.rest.dto;
 
+import com.github.invader.controller.model.application.Application;
+import com.github.invader.controller.model.application.ApplicationId;
+import com.github.invader.controller.model.configuration.Configuration;
 import com.github.invader.controller.model.configuration.ConfigurationData;
+import com.github.invader.controller.model.configuration.Delay;
+import com.github.invader.controller.model.configuration.Failure;
+import com.github.invader.controller.model.configuration.Trigger;
+import com.github.invader.controller.model.group.Group;
+import javaslang.control.Option;
 import org.springframework.stereotype.Component;
 
 @Component
 public class DtoMapper {
 
-    public CurrentConfig toCurrentConfig(com.github.invader.controller.model.configuration.Configuration configuration) {
-        ConfigurationData config = configuration.getConfigurationData();
-        return new CurrentConfig(new Failure(config.getFailure().getProbability()),
-                new Delay(config.getDelay().getMin(), config.getDelay().getMax()));
+    public CurrentConfigDto toCurrentConfig(ConfigurationData config) {
+        return new CurrentConfigDto(new FailureDto(config.getFailure().getProbability()),
+                new DelayDto(config.getDelay().getMin(), config.getDelay().getMax()));
     }
 
-    public com.github.invader.controller.model.Group fromGroupDto(Group groupDto) {
-        return new com.github.invader.controller.model.Group(groupDto.getId());
+    public Group fromGroupDto(GroupDto groupDto) {
+        return new Group(groupDto.getName());
     }
 
-    public Group toGroupDto(com.github.invader.controller.model.Group group) {
-        return new Group(group.getId());
+    public GroupDto toGroupDto(Group group) {
+        GroupDto groupDto = new GroupDto();
+        groupDto.setName(group.getName());
+        return groupDto;
     }
 
 
-//    public Config toConfig(com.github.invader.controller.model.configuration.Configuration configuration) {
-//        com.github.invader.controller.model.configuration.ConfigurationData configurationData = configuration.getConfigurationData();
-//        Config config = new Config(new Failure(configurationData.getFailure().getProbabvility()),
-//                new Delay(configurationData.getDelay().getMin(), configurationData.getDelay().getMax()));
-//        config.setId(configuration.getId());
-//        return config;
-//    }
-//
-//    public com.github.invader.controller.model.configuration.ConfigurationData fromConfigDto(Config configDto) {
-//        return new com.github.invader.controller.model.configuration.ConfigurationData(
-//                new com.github.invader.controller.model.configuration.Delay(configDto.getDelay().getMin(), configDto.getDelay().getMax()),
-//                new com.github.invader.controller.model.configuration.Failure(configDto.getFailure().getProbability())
-//        );
-//    }
-//
-//
-//    public Application toApplication(com.github.invader.controller.model.Application application) {
-//        return new Application(application.getId().getName(),
-//                application.getId().getGroupId(),
-//                application.getRegisteredAt(),
-//                application.getLastHeartbeat());
-//    }
-//
-//    public com.github.invader.controller.model.Application fromAppplicationDto(Application applicationDto, String groupId) {
-//        return new com.github.invader.controller.model.Application(new ApplicationId(applicationDto.getName(), groupId));
-//    }
+    public ConfigDto toConfigDto(Configuration configuration) {
+        ConfigurationData configurationData = configuration.getConfigurationData();
+        ConfigDto config = new ConfigDto();
+        config.setId(configuration.getId());
+        Option.of(configurationData).map(cd -> cd.getFailure()).peek(f -> config.setFailure(new FailureDto(f.getProbability())));
+        Option.of(configurationData).map(cd -> cd.getDelay()).peek(d -> config.setDelay(new DelayDto(d.getMin(), d.getMax())));
+        Option.of(configuration.getTrigger()).peek(c -> config.setTrigger(new TriggerDto(c.getStarts(), c.getEnds())));
+        return config;
+    }
+
+    public Configuration fromConfigDto(ConfigDto configDto) {
+        Configuration configuration = new Configuration();
+        ConfigurationData configurationData = new ConfigurationData();
+        Option.of(configDto.getDelay()).peek(d -> configurationData.setDelay(new Delay(d.getMin(), d.getMax())));
+        Option.of(configDto.getFailure()).peek(f -> configurationData.setFailure(new Failure(f.getProbability())));
+        Option.of(configDto.getTrigger()).peek(t -> configuration.setTrigger(new Trigger(t.getStarts(), t.getEnds())));
+        configuration.setConfigurationData(configurationData);
+        return configuration;
+
+    }
+
+
+    public ApplicationDto toApplicationDto(Application application) {
+        ApplicationDto applicationDto = new ApplicationDto();
+        applicationDto.setName(application.getId().getName());
+        applicationDto.setGroupName(application.getId().getGroupName());
+        applicationDto.setRegisteredAt(applicationDto.getRegisteredAt());
+        applicationDto.setLastHeartbeat(applicationDto.getLastHeartbeat());
+        return applicationDto;
+    }
+
+    public Application fromAppplicationDto(ApplicationDto applicationDto, String groupName) {
+        return new Application(new ApplicationId(applicationDto.getName(), groupName));
+    }
 
 }

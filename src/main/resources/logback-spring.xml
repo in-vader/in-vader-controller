@@ -16,11 +16,13 @@
         </encoder>
     </appender>
 
-    <logger name="org.springframework" level="ERROR"/>
+    <logger name="org.springframework" level="INFO"/>
     <logger name="com.github.invader.controller" level="INFO"/>
+    <logger name="org.springframework.data.mongodb.core.MongoTemplate" level="DEBUG"/>
+
 
     <springProfile name="dev">
-        <root level="info">
+        <root level="debug">
             <appender-ref ref="CONSOLE"/>
         </root>
     </springProfile>

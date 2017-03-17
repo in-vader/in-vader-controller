@@ -1,7 +1,0 @@
-invader:
-  defaultConfig:
-    delay:
-      min: 5
-      max: 1000
-    failure:
-      probability: 0.1

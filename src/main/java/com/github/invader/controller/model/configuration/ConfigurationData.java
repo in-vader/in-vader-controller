@@ -1,66 +1,24 @@
 package com.github.invader.controller.model.configuration;
 
-import java.util.Objects;
+import javaslang.control.Option;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ConfigurationData {
 
     private Delay delay;
 
     private Failure failure;
 
-    public ConfigurationData() {
-
-    }
-
-    public ConfigurationData(Delay delay, Failure failure) {
-        this.delay = delay;
-        this.failure = failure;
-    }
-
-    public void setDelay(Delay delay) {
-        this.delay = delay;
-    }
-
-    public void setFailure(Failure failure) {
-        this.failure = failure;
-    }
-
-    public Delay getDelay() {
-        return delay;
-    }
-
-    public Failure getFailure() {
-        return failure;
-    }
-
-    public ConfigurationData merge(ConfigurationData configurationData) {
-        return new ConfigurationData(
-                delay == null ? configurationData.delay : delay,
-                failure == null ? configurationData.failure : failure
-        );
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        ConfigurationData other = (ConfigurationData) o;
-        return Objects.equals(other.delay, delay) && Objects.equals(other.failure, failure);
-
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(delay, failure);
-    }
-
-
-    @Override
-    public String toString() {
-        return "ConfigurationData{" +
-                "delay=" + delay +
-                ", failure=" + failure +
-                '}';
+    public ConfigurationData merge(ConfigurationData from) {
+        return Option.of(from)
+                .map(f -> new ConfigurationData(
+                        this.getDelay() != null ? this.getDelay() : f.getDelay(),
+                        this.getFailure() != null ? this.getFailure() : f.getFailure()))
+                .getOrElse(this);
     }
 }

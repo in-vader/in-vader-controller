@@ -1,25 +1,35 @@
 package com.github.invader.controller.model.configuration;
 
+import com.github.invader.controller.model.application.ApplicationId;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
+
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode(of = "id")
 @Document
 public class Configuration {
 
     @Id
-    private Long id;
+    private String id;
 
-    private String applicationId;
+    @Field
+    private ApplicationId applicationId;
 
-    private String groupId;
+    @Field
+    private String groupName;
 
+    @Field
     private ConfigurationData configurationData;
 
-    public ConfigurationData getConfigurationData() {
-        return configurationData;
-    }
+    @Field
+    private Trigger trigger;
 
-    public void setConfigurationData(ConfigurationData configurationData) {
-        this.configurationData = configurationData;
-    }
 }

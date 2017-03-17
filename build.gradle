@@ -6,7 +6,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath "gradle.plugin.com.sourcemuse.gradle.plugin:gradle-mongo-plugin:1.0.0"
+        classpath 'gradle.plugin.com.sourcemuse.gradle.plugin:gradle-mongo-plugin:1.0.0'
         classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.4.2.RELEASE'
     }
 }
@@ -18,9 +18,7 @@ apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'com.sourcemuse.mongo'
 
-
-task bootRunDev(type: org.springframework.boot.gradle.run.BootRunTask) {
-    group = 'Application'
+task bootRunDev(type: org.springframework.boot.gradle.run.BootRunTask, group: 'Application') {
     doFirst() {
         main = project.mainClassName
         classpath = sourceSets.main.runtimeClasspath
@@ -31,7 +29,7 @@ task bootRunDev(type: org.springframework.boot.gradle.run.BootRunTask) {
 
 jar {
     baseName = 'in-vader-controller'
-    version =  '0.0.1'
+    version =  '1.0'
 }
 
 repositories {
@@ -45,7 +43,32 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-data-mongodb'
     compile 'io.javaslang:javaslang:2.0.5'
 
-    // tag::tests[]
+    compileOnly 'org.projectlombok:lombok'
+
     testCompile 'org.springframework.boot:spring-boot-starter-test'
-    // end::tests[]
+    testCompile 'uk.co.datumedge:hamcrest-json:0.2'
 }
+
+sourceSets {
+    test {
+        java.srcDir 'src/test/java'
+    }
+    integration {
+        java.srcDir 'src/test/integration/java'
+        resources.srcDir 'src/test/resources'
+        compileClasspath += main.output + test.output
+        runtimeClasspath += main.output + test.output
+    }
+}
+
+configurations {
+    integrationCompile.extendsFrom testCompile
+    integrationRuntime.extendsFrom testRuntime
+}
+
+task integration(type: Test, description: 'Runs the integration tests.', group: 'Verification') {
+    testClassesDir = sourceSets.integration.output.classesDir
+    classpath = sourceSets.integration.runtimeClasspath
+    runWithMongoDb = true
+}
+

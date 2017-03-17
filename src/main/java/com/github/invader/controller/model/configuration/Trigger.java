@@ -2,18 +2,17 @@ package com.github.invader.controller.model.configuration;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Delay {
+public class Trigger {
 
-    private Integer min;
+    private LocalDateTime starts;
 
-    private Integer max;
+    private LocalDateTime ends;
 
 }
-
-
