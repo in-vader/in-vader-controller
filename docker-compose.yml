@@ -1,0 +1,19 @@
+mongodb:
+  image: mongo:3.0.14
+  ports:
+    - "27017:27017"
+    - "28017:28017"
+  command: mongod --smallfiles --rest
+
+app:
+  image: java:8
+  working_dir: /app
+  volumes:
+    - ./build/libs:/app
+  command: java -jar /app/in-vader-controller-1.0.jar
+  ports:
+    - "8080:8080"
+  links:
+    - mongodb
+  environment:
+    SPRING_DATA_MONGODB_URI: mongodb://mongodb/userregistration
