@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/${user.home}/logs/in-vader-controller.log</file>
+        <append>true</append>
+
+        <encoder>
+            <pattern>%d{ISO8601} %X{requestInfo} %-5level [%logger{1}] - %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{ISO8601} %X{requestInfo} %-5level [%logger{1}] - %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org.springframework" level="INFO"/>
+    <logger name="com.github.invader.controller" level="INFO"/>
+    <logger name="org.springframework.data.mongodb.core.MongoTemplate" level="DEBUG"/>
+
+
+    <springProfile name="dev">
+        <root level="debug">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="prod">
+        <root level="info">
+            <appender-ref ref="FILE"/>
+        </root>
+    </springProfile>
+
+</configuration>

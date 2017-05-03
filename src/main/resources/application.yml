@@ -1,25 +1,7 @@
-spring:
-  output:
-      ansi:
-        enabled: ALWAYS
-  datasource:
-    driverClassName: org.h2.Driver
-    username: sa
-    password:
-    platform: h2
-    initialize: true
-    url: jdbc:h2:~/file/InVaderDb;DB_CLOSE_DELAY=- 1;DB_CLOSE_ON_EXIT=FALSE;FILE_LOCK=FS
-  h2:
-    console:
-      enabled: true
-  jpa:
-    properties:
-      hibernate:
-        show_sql: true
-
 invader:
-  agent:
-    delayMin: 0
-    delayMax: 2000
-    failure: 0.5
-
+  defaultConfig:
+    delay:
+      min: 5
+      max: 5000
+    failure:
+      probability: 0.5

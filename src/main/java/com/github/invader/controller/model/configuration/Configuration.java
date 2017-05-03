@@ -1,35 +1,35 @@
 package com.github.invader.controller.model.configuration;
 
-import javax.persistence.*;
+import com.github.invader.controller.model.application.ApplicationId;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-@Entity
-@Inheritance
-@DiscriminatorColumn(name="configuration_type")
-@Table(name = "configuration")
+
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode(of = "id")
+@Document
 public class Configuration {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "configurationIdGenerator")
-    @SequenceGenerator(name = "configurationIdGenerator", sequenceName = "seq_configuration_id")
-    private Long id;
+    private String id;
 
-    @Embedded
-    private ConfigurationData configurationData = new ConfigurationData();
+    @Field
+    private ApplicationId applicationId;
 
-    public Long getId() {
-        return id;
-    }
+    @Field
+    private String groupName;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @Field
+    private ConfigurationData configurationData;
 
-    public void setConfigurationData(ConfigurationData configurationData) {
-        this.configurationData = configurationData;
-    }
-
-    public ConfigurationData getConfigurationData() {
-        return configurationData;
-    }
+    @Field
+    private Trigger trigger;
 
 }

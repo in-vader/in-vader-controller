@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{ISO8601} %X{requestInfo} %-5level - %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org.springframework" level="INFO"/>
+    <logger name="com.github.invader.controller" level="INFO"/>
+    <logger name="org.springframework.data.mongodb.core.MongoTemplate" level="DEBUG"/>
+
+    <root level="info">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+</configuration>
